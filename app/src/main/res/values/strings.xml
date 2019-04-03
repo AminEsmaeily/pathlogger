@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Path Logger Sample</string>
+    <string name="action_settings">Settings</string>
+    <string name="current_location">Current Location</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="altitude">Altitude</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="speed">Speed</string>
+    <string name="time">Time</string>
+    <string name="gps">GPS</string>
+    <string name="cell_tower">Cell Tower</string>
+</resources>
