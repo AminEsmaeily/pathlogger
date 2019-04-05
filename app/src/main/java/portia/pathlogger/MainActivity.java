@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,8 @@ import portia.pathlogger.exception.ExceptionBase;
 import portia.pathlogger.fragments.CurrentLocationFragment;
 import portia.pathlogger.fragments.FragmentBase;
 import portia.pathlogger.fragments.MapViewFragment;
+import portia.pathlogger.model.CellTowerModel;
+import portia.pathlogger.model.GPSModel;
 import portia.pathlogger.model.ModelBase;
 import portia.pathlogger.provider.LocationInformationHandler;
 
@@ -48,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         startLogger();
     }
 
@@ -73,7 +80,17 @@ public class MainActivity extends AppCompatActivity {
             try {
                 pathLogger = new PathLogger(getApplicationContext(), new LocationInformationHandler() {
                     @Override
-                    public void OnInformationReceived(ModelBase information) {
+                    public void OnInformationReceived(GPSModel information) {
+                        FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                        for(int i = 0; i < adapter.getCount(); i++){
+                            FragmentBase fragment = (FragmentBase)adapter.getItem(i);
+                            if(fragment != null)
+                                fragment.onLocationReceived(information);
+                        }
+                    }
+
+                    @Override
+                    public void OnInformationReceived(List<CellTowerModel> information) {
                         FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
                         for(int i = 0; i < adapter.getCount(); i++){
                             FragmentBase fragment = (FragmentBase)adapter.getItem(i);

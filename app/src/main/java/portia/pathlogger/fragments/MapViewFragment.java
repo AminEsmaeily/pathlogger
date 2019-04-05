@@ -17,7 +17,10 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.util.List;
+
 import portia.pathlogger.R;
+import portia.pathlogger.model.CellTowerModel;
 import portia.pathlogger.model.GPSModel;
 import portia.pathlogger.model.ModelBase;
 
@@ -60,15 +63,18 @@ public class MapViewFragment extends FragmentBase {
     }
 
     @Override
-    public void onLocationReceived(ModelBase location) {
-        if(location instanceof GPSModel) {
-            IMapController mapController = map.getController();
-            GeoPoint startPoint = new GeoPoint(((GPSModel)location).getLatitude(), ((GPSModel)location).getLongitude(), ((GPSModel)location).getAltitude());
-            if(!centered) {
-                mapController.setZoom(9.5);
-                mapController.setCenter(startPoint);
-                centered = true;
-            }
+    public void onLocationReceived(GPSModel location) {
+        IMapController mapController = map.getController();
+        GeoPoint startPoint = new GeoPoint(((GPSModel) location).getLatitude(), ((GPSModel) location).getLongitude(), ((GPSModel) location).getAltitude());
+        if (!centered) {
+            mapController.setZoom(9.5);
+            mapController.setCenter(startPoint);
+            centered = true;
         }
+    }
+
+    @Override
+    public void onLocationReceived(List<CellTowerModel> location) {
+
     }
 }
